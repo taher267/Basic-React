@@ -1,9 +1,13 @@
-import React from 'react';
+const Text = ({ ad: addEmoji, brk, ang }) => {
 
-const Text = ({ ad, brk }) => {
+    let text = `I'm default text again`;
 
-    const text = `I'm default text again`;
-    return <>{brk ? (ad ? brk(ad(text, '🍎')) : brk(text)) : text}</>
+    if (ang) text = `${ang(text)}`;
+    if (brk) text = `${brk(text)}`;
+    if (addEmoji) text = `${addEmoji(text, '🍎')}`;
+
+    return text;
+    // return <>{brk ? (ad ? brk(ad(text, '🍎')) : brk(text)) : text}</>
 }
 
 export default Text;

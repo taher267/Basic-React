@@ -1,0 +1,8 @@
+import React from 'react'
+
+const Angle = ({ children }) => {
+    const ang = (text) => `<${text}>`
+    return children({ ang })
+}
+
+export default Angle;
