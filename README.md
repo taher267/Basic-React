@@ -178,23 +178,51 @@ const withCounter = (OriginalComponent) => {
     return newFunction;
 }
 
-export default withCounter
+export default withCounter;
 
 **Function 02 click increment**
 
 
-import withCounter from '../HOC/withCounter'
+import withCounter from '../HOC/withCounter';
+
 const ClickCounter = ({ count, increment }) => {
     return <div><button onClick={increment}>Click {count} times</button></div>
 }
 
-export default withCounter(ClickCounter)
+export default withCounter(ClickCounter);
 
 
 **Function 02 mouse increment**
 
-import withCounter from '../HOC/withCounter'
+import withCounter from '../HOC/withCounter';
 const ClickCounter = ({ count, increment }) => {
     return <div><button onMouseOver={increment}>Hover {count} times</button></div>
 }
 export default withCounter(ClickCounter);
+
+
+### Render Props
+
+import { Component } from 'react';
+export class Counter extends Component {
+    state = {
+        count: 0,
+    }
+    increamentCount = () => this.setState(({ count }) => ({ count: ++count }));
+    render() {
+        const { count } = this.state;
+        const { myFunc } = this.props;
+        return myFunc(count, this.increamentCount)
+    }
+}
+
+
+const Index = () => {
+    return <>
+        <Counter myFunc={(count, increamentCount) => <button onMouseOver={increamentCount}>Hover {count}</button>} />
+        <hr />
+        <Counter myFunc={(count, increamentCount) => <button onClick={increamentCount}>Click {count}</button>} />
+    </>
+}
+
+export default Index;
