@@ -1,70 +1,147 @@
-# Getting Started with Create React App
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-## Available Scripts
-
-In the project directory, you can run:
-
-### `yarn start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `yarn test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
 ### Deployment
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
 
-### `yarn build` fails to minify
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## compositon Vs Inheritance
+Inheritance, Bad practice in React : [Link](https://reactjs.org/docs/composition-vs-inheritance.html)
+
+
+### Inheritance
+React was small component and reuse ability
+and also independent
+but it is Dependent on another component
+**Func 01**
+import React, { Component } from 'react'
+
+export default class Emoji extends Component {
+    addEmoji = ({ text, emoji }) => `${emoji} ${text} ${emoji}`;
+
+    render(decortedText) {
+        let text = `This is default text`;
+        if (decortedText) {
+            text = decortedText
+        }
+        return (
+            <div>{text}</div>
+        )
+    }
+}
+
+
+import Emoji from './Emoji';
+**Func 02**
+class Text extends Emoji {
+    // eslint-disable-next-line no-useless-constructor
+    constructor(props) {
+        super(props);
+    }
+    render() {
+        const decoretedText = this.addEmoji({ text: 'This is my text', emoji: "📧" });
+        return super.render(decoretedText);
+    }
+}
+
+export default Text;
+**Func 03**
+import React, { Component } from 'react';
+import Text from './Text';
+
+class index extends Component {
+    render() {
+        return (
+            <div>
+                <Text />
+            </div>
+        );
+    }
+}
+
+export default index;
+
+
+### Composition
+**Func 01**
+import React from 'react';
+
+const Text = ({ ad }) => {
+    const text = `I'm default text again`;
+    return <>{ad ? ad(text, 'EMO') : text}</>
+}
+
+export default Text;
+**Func 02**
+import React, { Component } from 'react'
+
+export default class Emoji extends Component {
+    ad = (text, emoji) => `${emoji} ${text} ${emoji}`;
+
+    render() {
+        return this.props.children({ ad: this.ad })
+    }
+}
+
+**Func 03**
+
+import React from 'react'
+import Text from './Text'
+import Emoji from './Emoji';
+
+const index = () => {
+    return (
+        <div><Emoji>{
+            ({ ad }) => <Text ad={ad} />
+        }</Emoji></div>
+    )
+}
+
+export default index;
+
+### Nested
+**Func 01**
+import Text from './Text'
+import Emoji from './Emoji';
+import Bracket from './Bracket';
+
+const index = () => {
+    return (
+        <div>
+            <Emoji>{
+                ({ ad }) => <Bracket>
+                    {({ brk }) => <Text ad={ad} brk={brk} />}
+                </Bracket>
+
+            }</Emoji>
+
+
+        </div>
+    )
+}
+
+export default index;
+**Func 02**
+import React, { Component } from 'react'
+
+export default class Bracket extends Component {
+    brk = (text) => `[ ${text} ]`;
+
+    render() {
+        return this.props.children({ brk: this.brk })
+    }
+}
+**Func 02 Prev Composition Emoji Func 01**
+
+
+**Func 04**
+import React from 'react';
+
+const Text = ({ ad, brk }) => {
+
+    const text = `I'm default text again`;
+    return <>{brk ? (ad ? brk(ad(text, '🍎')) : brk(text)) : text}</>
+}
+
+export default Text;
+
+
+
