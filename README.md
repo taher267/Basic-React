@@ -11,10 +11,13 @@ Inheritance, Bad practice in React : [Link](https://reactjs.org/docs/composition
 React was small component and reuse ability
 and also independent
 but it is Dependent on another component
+
 **Func 01**
-import React, { Component } from 'react'
+
+import { Component } from 'react';
 
 export default class Emoji extends Component {
+
     addEmoji = ({ text, emoji }) => `${emoji} ${text} ${emoji}`;
 
     render(decortedText) {
@@ -30,12 +33,17 @@ export default class Emoji extends Component {
 
 
 import Emoji from './Emoji';
+
+
 **Func 02**
+
 class Text extends Emoji {
     // eslint-disable-next-line no-useless-constructor
+
     constructor(props) {
         super(props);
     }
+
     render() {
         const decoretedText = this.addEmoji({ text: 'This is my text', emoji: "📧" });
         return super.render(decoretedText);
@@ -43,8 +51,11 @@ class Text extends Emoji {
 }
 
 export default Text;
+
 **Func 03**
+
 import React, { Component } from 'react';
+
 import Text from './Text';
 
 class index extends Component {
@@ -111,10 +122,7 @@ const index = () => {
                 ({ ad }) => <Bracket>
                     {({ brk }) => <Text ad={ad} brk={brk} />}
                 </Bracket>
-
             }</Emoji>
-
-
         </div>
     )
 }
@@ -195,6 +203,7 @@ export default withCounter(ClickCounter);
 **Function 02 mouse increment**
 
 import withCounter from '../HOC/withCounter';
+
 const ClickCounter = ({ count, increment }) => {
     return <div><button onMouseOver={increment}>Hover {count} times</button></div>
 }
@@ -204,6 +213,7 @@ export default withCounter(ClickCounter);
 ### Render Props
 
 import { Component } from 'react';
+
 export class Counter extends Component {
     state = {
         count: 0,
@@ -217,12 +227,16 @@ export class Counter extends Component {
 }
 
 
-const Index = () => {
-    return <>
+const Index = () =><>
         <Counter myFunc={(count, increamentCount) => <button onMouseOver={increamentCount}>Hover {count}</button>} />
         <hr />
         <Counter myFunc={(count, increamentCount) => <button onClick={increamentCount}>Click {count}</button>} />
     </>
-}
 
 export default Index;
+
+
+
+# Context API
+
+Thinking like that [Context Api figma](https://www.figma.com/file/s7te5IH0GYtD2wixyzDYDi/Untitled?node-id=0%3A1)
